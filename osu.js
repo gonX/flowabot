@@ -997,7 +997,7 @@ module.exports = {
         lines[0] += `${moment(recent.date).fromNow()}`;
 
         if(recent.pp_fc > recent.pp)
-            lines[1] += `**${recent.unsubmitted ? '*' : ''}${+recent.pp.toFixed(2)}pp**${recent.unsubmitted ? '*' : ''} ➔ ${+recent.pp_fc.toFixed(2)}pp for ${+recent.acc_fc.toFixed(2)}% FC${helper.sep}`;
+            lines[1] += `**${recent.unsubmitted ? '*' : ''}${+recent.pp.toFixed(2)}pp**${recent.unsubmitted ? '*' : ''} ➔ ${+recent.pp_fc.toFixed(2)}pp for ${+recent.acc_fc.toFixed(2)}% FC\n`;
         else
             lines[1] += `**${+recent.pp.toFixed(2)}pp**${helper.sep}`
 
@@ -1006,10 +1006,7 @@ module.exports = {
         else
             lines[1] += `${recent.max_combo}x`;
 
-        if(recent.pp_fc > recent.pp)
-            lines[1] += `\n`;
-        else if(recent.ur || recent.count100 || recent.count50 || recent.countmiss)
-            lines[1] += helper.sep;
+        lines[1] += helper.sep;
 
         if(recent.count100 > 0)
             lines[1] += `${recent.count100}x100`;
