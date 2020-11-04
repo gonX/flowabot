@@ -44,9 +44,9 @@ if(helper.getItem('top_plays')){
 
 let discord_client, last_beatmap;
 
-const DIFF_MODS = ["HR","EZ","DT","HT"];
+const DIFF_MODS = ["HR","EZ","DT","NC","HT"];
 
-const TIME_MODS = ["DT", "HT"];
+const TIME_MODS = ["DT", "NC", "HT"];
 
 const CHART_THEME = {
     chart: {
@@ -123,7 +123,7 @@ const mods_enum = {
     'DT'  : 64,
     'RX'  : 128,
     'HT'  : 256,
-    'NC'  : 512,
+    'NC'  : 64,
     'FL'  : 1024,
     'AT'  : 2048,
     'SO'  : 4096,
@@ -278,7 +278,7 @@ function getDifficultyAttribs(results){
 function calculateCsArOdHp(cs_raw, ar_raw, od_raw, hp_raw, mods_enabled){
 	var speed = 1, ar_multiplier = 1, ar, ar_ms;
 
-	if(mods_enabled.includes("DT")){
+	if(mods_enabled.includes("DT") || mods_enabled.includes("NC")){
 		speed *= 1.5;
 	}else if(mods_enabled.includes("HT")){
 		speed *= .75;
@@ -479,7 +479,7 @@ function getScore(recent_raw, cb){
 
             let speed = 1;
 
-            if(recent.mods.includes('DT'))
+            if(recent.mods.includes('DT') || recent.mods.includes('NC'))
                 speed *= 1.5;
             else if(recent.mods.includes('HT'))
                 speed *= 0.75;
@@ -510,7 +510,7 @@ function getScore(recent_raw, cb){
                 fail_percent: fail_percent
             }, recent);
 
-            let diff = response.difficulty[getModsEnum(recent.mods.filter(mod => DIFF_MODS.includes(mod)))];
+            let diff = response.difficulty[getModsEnum(recent.mods.filter(mod => DIFF_MODS.includes(mod.includes("NC") ? mod.replace("NC","DT") : mod)))];
 
             if(diff.aim && diff.speed){
                 let pp = ojsama.ppv2({
@@ -596,7 +596,7 @@ function getScore(recent_raw, cb){
 	                });
 
 	                recent.ur = -1;
-	                if(recent.mods.includes("DT") || recent.mods.includes("HT"))
+	                if(recent.mods.includes("DT") || recent.mods.includes("NC") || recent.mods.includes("HT"))
 	                    recent.cvur = -1;
 	                cb(null, recent, strains_bar, ur_promise);
 	            }else{
@@ -1256,7 +1256,7 @@ module.exports = {
 
             let speed = 1;
 
-            if(options.mods.includes('DT'))
+            if(options.mods.includes('DT') || options.mods.includes('NC'))
                 speed *= 1.5;
             else if(options.mods.includes('HT'))
                 speed *= 0.75;
@@ -1265,7 +1265,7 @@ module.exports = {
             let bpm_min = beatmap.bpm_min * speed;
             let bpm_max = beatmap.bpm_max * speed;
 
-            let diff = response.difficulty[getModsEnum(options.mods.filter(mod => DIFF_MODS.includes(mod)))];
+            let diff = response.difficulty[getModsEnum(options.mods.filter(mod => DIFF_MODS.includes(mod.includes("NC") ? mod.replace("NC","DT") : mod)))];
 
             if(!diff.aim && !diff.speed){
                 cb('No difficulty data for this map! Please try again later');
@@ -1435,7 +1435,7 @@ module.exports = {
 
             let speed_multiplier = 1;
 
-            if(mods_array.includes("DT"))
+            if(mods_array.includes("DT") || recent.mods.includes("NC"))
                 speed_multiplier *= 1.5;
 
             if(mods_array.includes("HT"))
@@ -1707,7 +1707,7 @@ module.exports = {
             let mods = ojsama.modbits.from_string(mods_string || "");
             let mods_array = getMods(mods);
 
-            let mods_filtered = mods_array.filter(mod => DIFF_MODS.includes(mod));
+            let mods_filtered = mods_array.filter(mod => DIFF_MODS.includes(mod.includes("NC") ? mod.replace("NC","DT") : mod));
 
             if(mods_filtered.length > 0){
                 map.version += ' +' + mods_filtered.join('');
@@ -1715,7 +1715,7 @@ module.exports = {
 
             let speed_multiplier = 1;
 
-            if(mods_array.includes("DT"))
+            if(mods_array.includes("DT") || mods_array.includes("NC"))
                 speed_multiplier *= 1.5;
 
             if(mods_array.includes("HT"))

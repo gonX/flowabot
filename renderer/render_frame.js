@@ -526,7 +526,7 @@ module.exports = {
 
             let time_scale = 1;
 
-            if(enabled_mods.includes('DT'))
+            if(enabled_mods.includes('DT') || enabled_mods.includes('NC'))
                 time_scale *= 1.5;
 
             if(enabled_mods.includes('HT'))
