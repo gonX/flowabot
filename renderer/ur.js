@@ -72,7 +72,7 @@ function withinCircle(x, y, centerX,  centerY, radius){
 function calculate_csarod(cs_raw, ar_raw, od_raw, mods_enabled){
 	let speed = 1, ar_multiplier = 1, ar, ar_ms;
 
-	if(mods_enabled.includes("DT")){
+	if(mods_enabled.includes("DT") || mods_enabled.includes("NC")){
 		speed *= 1.5;
 	}else if(mods_enabled.includes("HT")){
 		speed *= .75;
@@ -229,7 +229,7 @@ function calculateUr(options, cb){
 
         let speed_multiplier = 1;
 
-        if(options.mods.includes("DT")){
+        if(options.mods.includes("DT") || options.mods.includes("NC")){
             speed_multiplier = 1.5;
         }else if(options.mods.includes("HT")){
             speed_multiplier = 0.75;

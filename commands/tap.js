@@ -81,7 +81,7 @@ module.exports = {
                     name += 'NOMOD';
 
                 if(i == 1)
-                    name += '+DT';
+                    name += '+DT/NC';
 
                 if(i == 2)
                     name += '+HT';
